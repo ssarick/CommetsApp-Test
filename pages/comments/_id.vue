@@ -1,37 +1,52 @@
 <template>
-  <div>
-    <div class="card">
+  <div class="main">
+    <div v-if="!loading" class="card">
       <div class="card__head heading">
         Comment full description
       </div>
-      <div v-if="data" class="card__body">
-        <p><span>postId:</span> {{ data.postId }}</p>
-        <p><span>id:</span>{{ data.id }}</p>
-        <p><span>name:</span>{{ data.name }}</p>
-        <p><span>email:</span>{{ data.email }}</p>
-        <p><span>body:</span>{{ data.body }}</p>
+      <div v-if="getSingleComment" class="card__body">
+        <p><span>postId:</span> {{ getSingleComment.postId }}</p>
+        <p><span>id:</span>{{ getSingleComment.id }}</p>
+        <p><span>name:</span>{{ getSingleComment.name }}</p>
+        <p><span>email:</span>{{ getSingleComment.email }}</p>
+        <p><span>body:</span>{{ getSingleComment.body }}</p>
       </div>
+    </div>
+    <div v-else>
+      <Loader/>
     </div>
   </div>
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
+import Loader from "~/components/loader";
 
 export default {
   name: "Id",
   data() {
-    return {
-      data: null
+    return{
+     loading: false
     }
   },
-  methods: {
-    ...mapActions(['GET_COMMENTS_FROM_API']),
+  components: {
+    Loader
   },
-  mounted() {
-    this.GET_COMMENTS_FROM_API(this.$router.currentRoute.params.id).then(res => {
-      res.forEach(e => this.data = e)
-    })
+  computed: {
+    ...mapGetters(['getSingleComment'])
+  },
+  methods: {
+    ...mapActions(['GET_COMMENTS_BY_ID']),
+  },
+  async mounted() {
+    this.loading = true
+    await this.GET_COMMENTS_BY_ID(this.$router.currentRoute.params.id)
+      .then( res => {
+        if (!res.length){
+          this.$router.push('/comments')
+        }
+      })
+    this.loading = false
   },
 }
 </script>

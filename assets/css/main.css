@@ -19,6 +19,13 @@ main {
   padding-top: 2rem;
 }
 
+.main{
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 
 .title {
   display: flex;
@@ -27,8 +34,9 @@ main {
   cursor: pointer;
   margin: 12px 16px;
 }
+
 .table {
-  max-width: 60%;
+  max-width: 100%;
   margin: 40px auto;
   text-align: left;
   background: #FFFFFF;
@@ -48,10 +56,12 @@ main {
   font-size: 16px;
   font-weight: bold;
 }
-.heading i{
+
+.heading i {
   margin-left: 10px;
   margin-top: 5px;
 }
+
 .heading i:hover svg {
   fill: #c7c7c7;
 }
